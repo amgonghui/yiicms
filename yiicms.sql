@@ -28,21 +28,24 @@ DROP TABLE IF EXISTS `ad`;
 CREATE TABLE `ad` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(50) NOT NULL DEFAULT '',
+  `type` tinyint(4) DEFAULT '101' COMMENT '101 轮播图 102 友情链接',
+  `category_id` int(11) DEFAULT '0',
   `image` varchar(255) NOT NULL DEFAULT '',
   `link` varchar(255) NOT NULL DEFAULT '',
   `created_at` int(11) NOT NULL DEFAULT '0',
   `updated_at` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `i-type-category` (`type`,`category_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `ad` WRITE;
 /*!40000 ALTER TABLE `ad` DISABLE KEYS */;
 
-INSERT INTO `ad` (`id`, `title`, `image`, `link`, `created_at`, `updated_at`)
+INSERT INTO `ad` (`id`, `title`, `type`, `category_id`,`image`, `link`, `created_at`, `updated_at`)
 VALUES
-	(1,'百度','/uploads/ad-img/img_58500a3e1b241.jpg','http://www.baidu.com',1481640510,1481640673),
-	(2,'腾讯','/uploads/ad-img/img_58500a67014d3.jpg','http://www.qq.com',1481640551,1481640751),
-	(3,'网易','/uploads/ad-img/img_58500a8b4fb51.png','http://www.163.com',1481640587,1481640587);
+	(1,'百度',101,0,'/uploads/ad-img/img_58500a3e1b241.jpg','http://www.baidu.com',1481640510,1481640673),
+	(2,'腾讯',101,0,'/uploads/ad-img/img_58500a67014d3.jpg','http://www.qq.com',1481640551,1481640751),
+	(3,'网易',101,0,'/uploads/ad-img/img_58500a8b4fb51.png','http://www.163.com',1481640587,1481640587);
 
 /*!40000 ALTER TABLE `ad` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -667,7 +670,8 @@ CREATE TABLE `category` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '' COMMENT '分类名',
   `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父id',
-  `type` tinyint(4) NOT NULL COMMENT '1.news 2 products 3 photo',
+  `path` varchar(50) NOT NULL DEFAULT '0' COMMENT '完整的父id 用/分开',
+  `type` tinyint(4) NOT NULL COMMENT '1.news 2 products 3 download 4 photo',
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -677,14 +681,14 @@ CREATE TABLE `category` (
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
 
-INSERT INTO `category` (`id`, `name`, `pid`, `type`, `created_at`, `updated_at`)
+INSERT INTO `category` (`id`, `name`, `pid`, `path`, `type`, `created_at`, `updated_at`)
 VALUES
-	(1,'产品分类一',0,2,1481360463,1481452810),
-	(2,'默认分类',0,1,1481367786,1481367944),
-	(3,'新闻分类2',2,1,1481372394,1481372772),
-	(4,'产品分类二',0,2,1481609361,1481609361),
-	(5,'下载文档',0,3,1482155225,1482155225),
-	(6,'企业环境',0,4,1482559711,1482559711);
+	(1,'产品分类一',0,'',2,1481360463,1481452810),
+	(2,'默认分类',0,'',1,1481367786,1481367944),
+	(3,'新闻分类2',2,'',1,1481372394,1481372772),
+	(4,'产品分类二',0,'',2,1481609361,1481609361),
+	(5,'下载文档',0,'',3,1482155225,1482155225),
+	(6,'企业环境',0,'',4,1482559711,1482559711);
 
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -711,7 +715,7 @@ LOCK TABLES `config` WRITE;
 
 INSERT INTO `config` (`id`, `name`, `label`, `value`, `created_at`, `updated_at`)
 VALUES
-	(2,'contact_us','联系我们','<p>公司: 在北京网络科技</p><p>联系人: 李</p><p>QQ: 739800600</p><p>电话: 130435198910262331</p><p>E-mail: 739800600@qq.com</p><p>地址: 北京市丰台区大红门</p>',1481350005,1482902162),
+	(2,'contact_us','联系我们','<p>公司: 在北京网络科技</p><p>联系人: 李</p><p>QQ: 739800600</p><p>电话: 1304351</p><p>E-mail: 739800600@qq.com</p><p>地址: 北京市丰台区大红门</p>',1481350005,1482902162),
 	(3,'contact_us_page_id','联系我们','1',1481355647,1483169811);
 
 /*!40000 ALTER TABLE `config` ENABLE KEYS */;
@@ -733,6 +737,7 @@ CREATE TABLE `content` (
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0不显示1显示',
   `admin_user_id` int(11) NOT NULL DEFAULT '0',
+  `hits` int(11) NOT NULL DEFAULT '0' COMMENT '浏览数点击数',
   `created_at` int(11) NOT NULL DEFAULT '0',
   `updated_at` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),

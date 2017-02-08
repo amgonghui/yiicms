@@ -30,6 +30,9 @@ class ProductsController extends Controller
         }
         $model = Products::find()->where(['status'=>Products::STATUS_ENABLE, 'id'=>$id])->one();
 
+        if(empty($model)){
+            throw new NotFoundHttpException('你查看的页面不存在或者已删除');
+        }
         if(!empty($model->keywords)){
             $this->view->registerMetaTag(['name'=>'keywords', 'content'=>$model->keywords],'keywords');
         }
@@ -37,9 +40,6 @@ class ProductsController extends Controller
             $this->view->registerMetaTag(['name'=>'description', 'content'=>$model->description], 'description');
         }
 
-        if(empty($model)){
-            throw new NotFoundHttpException('你查看的页面不存在或者已删除');
-        }
         return $this->render('index',['model'=>$model]);
     }
     /**

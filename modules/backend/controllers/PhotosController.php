@@ -9,7 +9,8 @@
 
 namespace app\modules\backend\controllers;
 
-
+use app\modules\backend\actions\ContentDeleteAllAction;
+use app\modules\backend\actions\ContentCheckAction;
 use app\models\PhotosDetail;
 use app\modules\backend\components\BackendController;
 use app\models\Photos;
@@ -31,11 +32,31 @@ class PhotosController extends BackendController
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'delete-detail' => ['POST'],
+                    'edit-detail' => ['POST'],
                 ],
             ],
         ];
     }
-
+    public function actions()
+    {
+        return array_merge(parent::actions(), [
+            'check'=>[
+                'class'=>ContentCheckAction::class,
+                'type'=>Photos::$currentType,
+                'status'=>Photos::STATUS_ENABLE
+            ],
+            'un-check'=>[
+                'class'=>ContentCheckAction::class,
+                'type'=>Photos::$currentType,
+                'status'=>Photos::STATUS_DISABLE
+            ],
+            'delete-all'=>[
+                'class'=>ContentDeleteAllAction::class,
+                'type'=>Photos::$currentType,
+            ]
+        ]);
+    }
     /**
      * Lists all Content models.
      * @return mixed
@@ -86,7 +107,41 @@ class PhotosController extends BackendController
         }
         return [
             'code'=>1,
-            'data'=>empty($model->errors)?'':$model->errors,
+            'data'=>empty($model->firstErrors)?'上传失败':$model->firstErrors,
+        ];
+    }
+
+    /**
+     * 设置相册封面
+     * @param int $id
+     * @return array
+     */
+    public function actionSetCover($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $detailModel = PhotosDetail::findOne($id);
+        if(empty($detailModel)){
+            return [
+                'code'=>1,
+                'data'=>'照片不存在'
+            ];
+        }
+        $model = $detailModel->content;
+        if(empty($model)){
+            return [
+                'code'=>1,
+                'data'=>'相册不存在'
+            ];
+        }
+        if($detailModel->setCover()){
+            return [
+                'code'=>0,
+                'data'=>'操作成功'
+            ];
+        }
+        return [
+            'code'=>1,
+            'data'=>empty($model->firstErrors)?'操作失败':$model->firstErrors,
         ];
     }
 
@@ -107,8 +162,36 @@ class PhotosController extends BackendController
         }
         return [
             'code'=>1,
-            'data'=>empty($model->errors)?'':$model->errors,
+            'data'=>empty($model->firstErrors)?'修改失败':$model->firstErrors,
         ];
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function actionDeleteDetail($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = PhotosDetail::findOne($id);
+        if(empty($model)){
+            return [
+                'code'=>1,
+                'data'=>'图片不存在或者已删除',
+            ];
+        }
+        try {
+            $model->delete();
+            return [
+                'code' => 0,
+                'data' => '删除成功',
+            ];
+        }catch(\Exception $e){
+            return [
+                'code' => 1,
+                'data' => $e->getMessage(),
+            ];
+        }
     }
     /**
      * Creates a new Content model.
@@ -159,7 +242,7 @@ class PhotosController extends BackendController
         if($this->findModel($id)->delete()){
             return $this->showFlash('删除成功','success',['index']);
         }
-        return $this->showFlash('删除失败');
+        return $this->showFlash('删除失败', 'danger',Yii::$app->getUser()->getReturnUrl());
     }
 
     /**

@@ -1,11 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\LinkPager;
-use yii\widgets\Menu;
-use app\models\Content;
-
+use app\modules\backend\widgets\GridView;
+use app\models\Photos;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\backend\models\NewsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -27,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+                    ['class' => 'yii\grid\CheckboxColumn'],
                     [
                         'attribute' => 'id',
                         'options' => ['style' => 'width:50px']
@@ -37,13 +34,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     'description',
                     [
                         'attribute' => 'status',
+                        'filter'=>$searchModel::$statusList,
                         'options' => ['style' => 'width:60px'],
-                        'format' => 'text',
-                        'value' => 'statusText'
+                        'format' => 'html',
+                        'value' => function ($item) {
+                            if ($item['status'] == Photos::STATUS_ENABLE) {
+                                return '<span class="badge bg-green">' . $item['statusText'] . '</span>';
+                            } else {
+                                return '<span class="badge">' . $item['statusText'] . '</span>';
+                            }
+                        }
                     ],
                     // 'admin_user_id',
                     [
+                        'attribute' =>'hits',
+                        'options' => ['style' => 'width:50px']
+                    ],
+                    [
                         'attribute' => 'created_at',
+                        'filterType'=>'date',
                         'format' => 'datetime',
                         'options' => ['style' => 'width:160px']
                     ],

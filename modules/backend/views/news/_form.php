@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
     <div class="row">
         <div class="col-sm-6">
-            <?= $form->field($model, 'category_id')->widget(Select2::class,['data'=>ArrayHelper::map($model->categorys,'id', 'name')]) ?>
+            <?= $form->field($model, 'category_id')->widget(Select2::class,['data'=>(new \app\helpers\CategoryHelper(['categories'=>$model->categories]))->getKV()]) ?>
         </div>
         <div class="col-sm-6">
             <?= $form->field($model, 'status')->dropDownList($model::$statusList) ?>
@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
     </div>
     <?= $form->field($model->detail, 'detail')->widget(\kucha\ueditor\UEditor::className(), [
         'clientOptions' => [
+            'serverUrl'=>yii\helpers\Url::to('/backend/default/ueditor'),
             'initialFrameHeight' => '200'
         ]
     ]) ?>

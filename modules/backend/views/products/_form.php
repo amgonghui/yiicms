@@ -32,7 +32,7 @@ use kartik\file\FileInput;
     <?= $form->field($model, 'image',['options'=>['style'=>'display:none']])->hiddenInput(['id'=>'products-image'])?>
     <div class="row">
         <div class="col-sm-6">
-            <?= $form->field($model, 'category_id')->widget(Select2::class,['data'=>ArrayHelper::map($model->categorys,'id', 'name')]) ?>
+            <?= $form->field($model, 'category_id')->widget(Select2::class,['data'=>(new \app\helpers\CategoryHelper(['categories'=>$model->categories]))->getKV()]) ?>
         </div>
         <div class="col-sm-6">
             <?= $form->field($model, 'status')->dropDownList($model::$statusList) ?>
@@ -40,11 +40,13 @@ use kartik\file\FileInput;
     </div>
     <?= $form->field($model->detail, 'params')->widget(\kucha\ueditor\UEditor::className(),[
         'clientOptions'=>[
+            'serverUrl'=>yii\helpers\Url::to('/backend/default/ueditor'),
             'initialFrameHeight'=>'100'
         ]
     ]) ?>
     <?= $form->field($model->detail, 'detail')->widget(\kucha\ueditor\UEditor::className(), [
         'clientOptions' => [
+            'serverUrl'=>yii\helpers\Url::to('/backend/default/ueditor'),
             'initialFrameHeight' => '200'
         ]
     ]) ?>
@@ -56,11 +58,3 @@ use kartik\file\FileInput;
     <?php ActiveForm::end(); ?>
 
 </div>
-<script>
-    function removeImage(obj){
-        if(window.confirm('确认要删除图片吗？')) {
-            $('#products-image').val('');
-            $(obj).parent().parent().remove();
-        }
-    }
-</script>

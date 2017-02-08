@@ -27,17 +27,27 @@ class Module extends \yii\base\Module
 
         $this->resetErrorHandler();
         $this->rbacConfInit();
-
+        $this->resetLanguage();
         /**
          * 注册时间 记录下用户回退地址
          */
         $this->on(self::EVENT_AFTER_ACTION, function(){
+            if(Yii::$app->requestedRoute == 'backend/default/ueditor'){
+                return;
+            }
             if(!Yii::$app->request->isAjax) {
                 Url::remember();
             }
         });
     }
 
+    /**
+     * 重置app language
+     */
+    protected function resetLanguage()
+    {
+        Yii::$app->sourceLanguage = 'en-US';
+    }
     /**
      * 初始化rbac 配置初始化
      */

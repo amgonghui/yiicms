@@ -16,22 +16,6 @@ use yii\helpers\Html;
 
 class SiteController extends Controller
 {
-    public function behaviors()
-    {
-        if(isset(Yii::$app->params['cacheDuration']) && Yii::$app->params['cacheDuration']>=0){
-            return [
-                [
-                    'class' => 'yii\filters\PageCache',
-                    'duration' => Yii::$app->params['cacheDuration'],
-                    'only' => ['index', 'about'],
-                    'variations' => [
-                        \Yii::$app->language,
-                    ]
-                ]
-            ];
-        }
-        return parent::behaviors();
-    }
     /**
      * @inheritdoc
      */
@@ -64,6 +48,17 @@ class SiteController extends Controller
     }
 
     /**
+     * 修改语言
+     * @param string $language
+     * @return string
+     */
+    public function actionLanguage($language)
+    {
+        Yii::$app->session->set('language', $language);
+        $referrer = Yii::$app->request->getReferrer();
+        return $this->redirect($referrer?$referrer:Yii::$app->getHomeUrl());
+    }
+    /**
      * Displays contact page.
      *
      * @return string
@@ -75,7 +70,7 @@ class SiteController extends Controller
              return Config::find()->where(['name' => 'contact_us_page_id'])->one();
         }, 60);
         if($config) {
-            $page = Page::find()->where(['id' => $config])->one();
+            $page = Page::find()->where(['id' => $config->value])->one();
         } else {
             $page = null;
         }
@@ -107,7 +102,7 @@ class SiteController extends Controller
     {
         $config =Config::getDb()->cache(function ($db) {
              return Config::find()->where(['name' => 'about_us_page_id'])->one();
-        });
+        }, -1);
         if(empty($config)){
             throw new NotFoundHttpException('页面不存在');
         }

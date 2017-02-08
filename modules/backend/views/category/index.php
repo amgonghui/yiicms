@@ -1,13 +1,14 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-
+use app\modules\backend\widgets\GridView;
+use app\models\Category;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\backend\models\CategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/** @var int $type */
 
-$this->title = '分类管理';
+$this->title = Category::getTypes()[$type].'分类管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="category-index">
@@ -20,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
             <?= GridView::widget([
+                'layout'=>"{summary}\n{items}\n{pager}",
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'columns' => [
@@ -29,12 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         'options' => ['style' => 'width:50px']
                     ],
                     'name',
+                    'fullName',
                     [
-                        'attribute' => 'pid',
-                        'value' => 'parent.name',
-                        'options' => ['style' => 'width:100px']
-                    ],
-                    [
+                        'filterType'=>'date',
                         'attribute' => 'created_at',
                         'format' => 'datetime',
                         'options' => ['style' => 'width:150px']

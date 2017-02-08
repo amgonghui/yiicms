@@ -64,8 +64,12 @@ class Products extends Content
         if(empty($this->imageFile)){
             return '';
         }
-        $fileName = $this->createUploadFilePath().uniqid('img_').'.'. $this->imageFile->extension;
-
+        try {
+            $fileName = $this->createUploadFilePath() . uniqid('img_') . '.' . $this->imageFile->extension;
+        } catch (\Exception $e) {
+            $this->addError('imageFile', $e->getMessage());
+            return false;
+        }
         if($this->imageFile->saveAs(\Yii::getAlias('@webroot').$fileName)){
             return $fileName;
         }
@@ -97,6 +101,7 @@ class Products extends Content
             'description' => 'Description',
             'status' => '状态',
             'statusText' => '状态',
+            'hits' => '点击数',
             'created_at'=>'创建时间'
         ];
     }

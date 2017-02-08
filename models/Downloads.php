@@ -43,7 +43,7 @@ class Downloads extends Content
             [['title', 'type', 'status','category_id'], 'required'],
             [['file'], 'file', 'extensions' => 'zip,rar',],
             [['type', 'status', 'admin_user_id', 'category_id','created_at', 'updated_at'], 'integer'],
-            [['title', 'image', 'description'], 'string', 'max' => 255],
+            [['title', 'image', 'description', 'keywords'], 'string', 'max' => 255],
         ];
     }
 
@@ -53,7 +53,12 @@ class Downloads extends Content
             Yii::info('Model not updated due to validation error.', __METHOD__);
             return false;
         }
-        $file = $this->uploadFile();
+        try {
+            $file = $this->uploadFile();
+        } catch (\Exception $e) {
+            $this->addError('file', $e->getMessage());
+            return false;
+        }
         if($file){
             $this->detail->file_url = $file;
         }
@@ -103,6 +108,7 @@ class Downloads extends Content
             'description' => '描述',
             'status' => '状态',
             'statusText' => '状态',
+            'hits' => '点击数',
             'created_at'=>'创建时间'
         ];
     }

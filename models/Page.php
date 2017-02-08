@@ -14,6 +14,7 @@ use Yii;
  * @property string $keyword
  * @property string $template
  * @property integer $content
+ * @property array $templates
  */
 class Page extends \app\components\AppActiveRecord
 {
@@ -46,10 +47,10 @@ class Page extends \app\components\AppActiveRecord
     public function getTemplates()
     {
         return [
-            'about'=>'about',
-            'contact'=>'contact',
+//            'about'=>'about',
             'page'=>'page',
-            'index'=>'index',
+//            'index'=>'index',
+            'contact'=>'contact',
         ];
     }
     /**

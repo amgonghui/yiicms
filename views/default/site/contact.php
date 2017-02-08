@@ -27,7 +27,7 @@ empty($model) && $model = new Feedback();
         </div>
         <div class="col-lg-9">
 
-            <?=isset($page->content)?$page->content:''?>
+            <?=empty($page)?'':$page->content?>
 
             <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
 
@@ -59,7 +59,7 @@ empty($model) && $model = new Feedback();
                         <?php $form = ActiveForm::begin(['id' => 'contact-form','action'=>['/site/contact']]); ?>
                         <div class="row">
                             <div class="col-sm-6">
-                                <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
+                                <?= $form->field($model, 'name')->textInput() ?>
                             </div>
                             <div class="col-sm-6">
                                 <?= $form->field($model, 'email') ?>

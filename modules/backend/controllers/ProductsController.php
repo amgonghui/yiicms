@@ -42,12 +42,12 @@ class ProductsController extends BackendController
                 'type'=>Products::$currentType,
                 'status'=>Products::STATUS_ENABLE
             ],
-            'unCheck'=>[
+            'un-check'=>[
                 'class'=>ContentCheckAction::class,
                 'type'=>Products::$currentType,
                 'status'=>Products::STATUS_DISABLE
             ],
-            'deleteAll'=>[
+            'delete-all'=>[
                 'class'=>ContentDeleteAllAction::class,
                 'type'=>Products::$currentType,
             ]
@@ -130,7 +130,7 @@ class ProductsController extends BackendController
         if($this->findModel($id)->delete()){
             return $this->showFlash('删除成功','success',['index']);
         }
-        return $this->showFlash('删除失败');
+        return $this->showFlash('删除失败', 'danger',Yii::$app->getUser()->getReturnUrl());
     }
 
     /**

@@ -16,8 +16,10 @@ use yii\db\Expression;
  * @property string $description
  * @property integer $status
  * @property integer $admin_user_id
+ * @property integer $hits
  * @property integer $created_at
  * @property integer $updated_at
+ * @property array $categories
  */
 class Content extends AppActiveRecord
 {
@@ -35,6 +37,7 @@ class Content extends AppActiveRecord
         self::TYPE_NEWS=>'新闻',
         self::TYPE_PRODUCTS=>'产品',
         self::TYPE_DOWNLOADS=>'下载',
+        self::TYPE_PHOTOS=>'照片',
     ];
     /**
      * 自动更新详情
@@ -104,11 +107,20 @@ class Content extends AppActiveRecord
      * 获取全部的新闻分类
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function getCategorys()
+    public function getCategories()
     {
-        return Category::find()->where(['type'=>static::$currentType])->all();
+        return Category::find()->where(['type'=>static::$currentType])->asArray()->all();
     }
 
+    /**
+     * 累加点击量
+     * @param int $id
+     * @return int
+     */
+    public static function hitCounters($id)
+    {
+        return self::updateAllCounters(['hits'=>1], ['id'=>$id]);
+    }
     /**
      * 下一个
      */
@@ -129,6 +141,20 @@ class Content extends AppActiveRecord
             ->orderBy('id desc')
             ->limit(1)
             ->one();
+    }
+
+    /**
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return boolean whether the saving succeeded (i.e. no validation errors occurred).
+     */
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        $res = parent::save($runValidation, $attributeNames);
+        if(static::$autoUpdateDetail && $this->_detail->errors){
+            return false;
+        }
+        return $res;
     }
     /**
      * 更新 detail 表中的 contend_id
@@ -197,6 +223,7 @@ class Content extends AppActiveRecord
             'description' => 'Description',
             'keywords' => 'Keywords',
             'status' => '状态',
+            'hits' => '点击数',
             'statusText' => '状态',
             'created_at'=>'创建时间'
         ];

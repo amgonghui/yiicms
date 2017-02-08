@@ -27,22 +27,25 @@ class AppController extends Controller
         $this->view->params['adList'] = Ad::getDb()->cache(function(){
             return Ad::find()->asArray()->all();
         }, Yii::$app->params['cacheDuration']);
+
+        $this->pageCache();
     }
 
-    public function behaviors()
+    /**
+     * 设置缓存
+     */
+    protected function pageCache()
     {
         if (isset(Yii::$app->params['cacheDuration']) && Yii::$app->params['cacheDuration'] >= 0) {
-            return [
-                [
-                    'class' => 'yii\filters\PageCache',
-                    'duration' => Yii::$app->params['cacheDuration'],
-                    'variations' => [
-                        \Yii::$app->language,
-                        Yii::$app->request->get()
-                    ]
-                ],
+            $cacheConfig = [
+                'class' => 'yii\filters\PageCache',
+                'duration' => Yii::$app->params['cacheDuration'],
+                'variations' => [
+                    \Yii::$app->language,
+                    Yii::$app->request->get()
+                ]
             ];
+            $this->attachBehavior('pageCache', $cacheConfig);
         }
-        return parent::behaviors();
     }
 }

@@ -12,7 +12,7 @@
 use yii\grid\GridView;
 use yii\bootstrap\Html;
 
-$this->title = '下载';
+$this->title = Yii::t('app', '下载');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-index">
@@ -27,13 +27,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?=\app\widgets\ConfigPanel::widget(['configName'=>'contact_us',
                     'options'=>['class'=>'panel panel-default panel-'.\yii\helpers\ArrayHelper::getValue($this->params,'themeColor')]
                 ])?>
+                <?=\app\widgets\ConfigPanel::widget(['configName'=>'donate',
+                    'options'=>['class'=>'panel panel-default panel-'.\yii\helpers\ArrayHelper::getValue($this->params,'themeColor')]
+                ])?>
             </div>
             <div class="col-lg-9">
                 <div class="panel panel-default panel-<?=\yii\helpers\ArrayHelper::getValue($this->params,'themeColor')?>">
-                    <div class="panel-heading"><h3 class="panel-title">下载</h3></div>
-                </div>
-                <div>
+                    <div class="panel-heading"><h3 class="panel-title"><?=Yii::t('app', '下载')?></h3></div>
+
+                <div class="panel-body">
                     <?= GridView::widget([
+                        'pager'=>['hideOnSinglePage'=>false],
                         'dataProvider' => $dataProvider,
                         'tableOptions'=>['class'=>'table-simple'],
                         'showHeader'=>false,
@@ -43,7 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'title',
                                 'format'=>'raw',
                                 'value'=>function($item){
-                                    return Html::a($item->title, ['/downloads/', 'id'=>$item->id]);
+                                    $html = '<h4>'.Html::a($item->title, ['/downloads/', 'id'=>$item->id]).'</h4>';
+                                    $html .= '<p>'.Html::encode($item->description).'</p>';
+                                    return $html;
                                 }
                             ],
                             [
@@ -53,6 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                         ],
                     ]); ?>
+                </div>
                 </div>
             </div>
 

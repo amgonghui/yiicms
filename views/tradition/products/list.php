@@ -12,7 +12,7 @@
 use yii\widgets\ListView;
 use yii\bootstrap\Html;
 
-$this->title = '产品';
+$this->title = Yii::t('app', '产品');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
@@ -33,17 +33,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?=\app\widgets\ConfigPanel::widget(['configName'=>'contact_us',
                     'options'=>['class'=>'panel panel-default panel-'.\yii\helpers\ArrayHelper::getValue($this->params,'themeColor')]
                 ])?>
+                <?=\app\widgets\ConfigPanel::widget(['configName'=>'donate',
+                    'options'=>['class'=>'panel panel-default panel-'.\yii\helpers\ArrayHelper::getValue($this->params,'themeColor')]
+                ])?>
             </div>
             <div class="col-lg-9">
-                <div class="panel panel-default panel-<?=\yii\helpers\ArrayHelper::getValue($this->params,'themeColor')?>">
-                    <div class="panel-heading"><h3 class="panel-title">产品</h3></div>
-                </div>
-                <div class="row">
-                    <?= ListView::widget([
-                        'dataProvider' => $dataProvider,
-                        'layout' => "<div class='panel-body'>{items}</div>\n<div class='panel-body'>{pager}</div>",
-                        'itemView'=>'_item'
-                    ]); ?>
+                <div class="panel panel-default panel-<?= \yii\helpers\ArrayHelper::getValue($this->params, 'themeColor') ?>">
+                    <div class="panel-heading"><h3 class="panel-title"><?=Yii::t('app', '产品')?></h3></div>
+
+                    <div class="panel-body">
+                        <?= ListView::widget([
+                            'pager'=>['hideOnSinglePage'=>false],
+                            'dataProvider' => $dataProvider,
+                            'layout' => "{items}<div class='clearfix'></div><div class='panel-body'>{pager}</div>",
+                            'itemView' => '_item'
+                        ]); ?>
+                    </div>
                 </div>
             </div>
 

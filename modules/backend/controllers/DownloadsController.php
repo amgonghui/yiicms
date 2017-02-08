@@ -43,12 +43,12 @@ class DownloadsController extends BackendController
                 'type'=>Downloads::$currentType,
                 'status'=>Downloads::STATUS_ENABLE
             ],
-            'unCheck'=>[
+            'un-check'=>[
                 'class'=>ContentCheckAction::class,
                 'type'=>Downloads::$currentType,
                 'status'=>Downloads::STATUS_DISABLE
             ],
-            'deleteAll'=>[
+            'delete-all'=>[
                 'class'=>ContentDeleteAllAction::class,
                 'type'=>Downloads::$currentType,
             ]
@@ -131,7 +131,7 @@ class DownloadsController extends BackendController
         if($this->findModel($id)->delete()){
             return $this->showFlash('删除成功','success',['index']);
         }
-        return $this->showFlash('删除失败');
+        return $this->showFlash('删除失败','danger',Yii::$app->getUser()->getReturnUrl());
     }
 
     /**

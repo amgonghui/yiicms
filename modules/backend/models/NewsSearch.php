@@ -12,14 +12,15 @@ use app\models\News;
  */
 class NewsSearch extends News
 {
+//    public $status = 0;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'type','admin_user_id'], 'integer'],
-            [['title', 'image', 'description', 'created_at'], 'safe'],
+            [['id', 'type','admin_user_id','hits'], 'integer'],
+            [['title', 'status', 'image', 'description', 'created_at'], 'safe'],
         ];
     }
 
@@ -78,6 +79,7 @@ class NewsSearch extends News
             'id' => $this->id,
             'status' => $this->status,
             'admin_user_id' => $this->admin_user_id,
+            'hits' => $this->hits,
             'updated_at' => $this->updated_at,
         ]);
 
@@ -85,12 +87,10 @@ class NewsSearch extends News
             ->andFilterWhere(['like', 'description', $this->description]);
         $createAt = $this->getCreatedAt();
         if(is_array($createAt)) {
-
             $query->andFilterWhere(['>=','created_at', $createAt[0]])
                 ->andFilterWhere(['<=','created_at', $createAt[1]]);
         }else{
             $query->andFilterWhere(['created_at'=>$createAt]);
-
         }
 
         return $dataProvider;

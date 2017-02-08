@@ -11,6 +11,7 @@ use app\assets\AppAsset;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Carousel;
+use yii\helpers\Url;
 
 AppAsset::register($this)->css = [Yii::getAlias('/themes/tradition/css/site.css'),];
 $carouselItems = [];
@@ -56,12 +57,30 @@ if(!empty(Yii::$app->params['logo'])){
     <div class="topbar">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3">营销-SEO-头部优化文字</div>
-                <div class="col-lg-9"></div>
+                <div class="col-lg-9">
+                    <?=Yii::t('app', '欢迎访问YiiCms企业站系统')?>
+                    <span class="label label-warning">
+                        <a href="<?=Url::to('/site/language/?language=en-US')?>">English</a>/<a href="<?=Url::to('/site/language/?language=zh-CN')?>">中文</a>
+                    </span>
+                </div>
+                <div class="col-lg-3">
+                    <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['site/search'], 'options' => ['class' => 'navbar-form navbar-right', 'role' => "search"]]); ?>
+                    <div class="input-group input-group-sm" style="margin-top: -16px">
+                        <input type="text" class="form-control" id="navbar-search-input"
+                               value="<?= isset($this->params['keyword']) ? $this->params['keyword'] : '' ?>"
+                               placeholder="<?=Yii::t('app','输入关键字搜索')?>"
+                               name="keyword"
+                        />
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><?=Yii::t('app','搜索')?></button>
+                        </span>
+                    </div><!-- /input-group -->
+                    <?php ActiveForm::end(); ?>
+                </div>
             </div>
         </div>
     </div>
-    <div class="container" style="margin-bottom: -20px">
+    <div>
         <?php NavBar::begin([
             'brandLabel' => $brandLabel,
             'brandUrl' => Yii::$app->homeUrl,
@@ -69,7 +88,7 @@ if(!empty(Yii::$app->params['logo'])){
                 'class' => 'navbar  navbar-'. ArrayHelper::getValue($this->params, 'themeColor', 'blue'),
             ],
         ]);
-        echo Nav::widget(json_decode(Yii::$app->params['nav'], true));
+        echo Nav::widget(\app\helpers\CommonHelper::navTranslation(json_decode(Yii::$app->params['nav'], true)));
         ?>
         <?php NavBar::end(); ?>
     </div>
@@ -89,13 +108,28 @@ if(!empty(Yii::$app->params['logo'])){
 </div>
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right">技术支持<a href="http://yiicms.co">YiiCms</a></p>
+        <div class="row">
+            <div class="col-lg-12">&copy; YiiCms <?= date('Y') ?></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <a href="http://yiicms.co/backend" target="_blank">后台演示</a>
+            </div>
+            <div class="col-lg-3">
+                <a href="http://git.oschina.net/templi/yiicms" target="_blank">源码下载</a>
+            </div>
+            <div class="col-lg-3">
+                <a href="https://github.com/yongshengli/yiicms" target="_blank">github下载</a>
+            </div
+            <div class="col-lg-3">
+                QQ群:248898849
+            </div
+        </div>
+        <p class="pull-left">技术支持<a href="http://yiicms.co">YiiCms</a></p>
     </div>
 </footer>
 <?php $this->endBody() ?>
-<script type="text/javascript" src="//s.union.360.cn/93182.js"></script>
+<?= \app\widgets\Hook::widget(['configName'=>'tongji']); ?>
 </body>
 </html>
 <?php $this->endPage() ?>

@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'status',
                         'options' => ['style' => 'width:60px'],
                         'format' => 'html',
+                        'filter'=>$searchModel::$statusList,
                         'value' => function ($item) {
                             if($item['status']==Products::STATUS_ENABLE) {
                                 return '<span class="badge bg-green">' . $item['statusText'] . '</span>';
@@ -47,7 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     // 'admin_user_id',
                     [
+                        'attribute' =>'hits',
+                        'options' => ['style' => 'width:50px']
+                    ],
+                    [
                         'attribute' => 'created_at',
+                        'filterType'=>'date',
                         'format' => 'datetime',
                         'options' => ['style' => 'width:160px']
                     ],

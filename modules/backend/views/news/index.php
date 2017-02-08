@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use app\modules\backend\widgets\GridView;
 use yii\grid\CheckboxColumn;
+use app\modules\backend\grid\DataColumn;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\backend\models\NewsSearch */
@@ -35,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'description',
                     [
                         'attribute' => 'status',
+                        'filter'=>$searchModel::$statusList,
                         'options' => ['style' => 'width:60px'],
                         'format' => 'html',
                         'value' => function ($item) {
@@ -47,6 +49,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     // 'admin_user_id',
                     [
+                        'attribute' =>'hits',
+                        'options' => ['style' => 'width:50px']
+                    ],
+                    [
+                        'filterType'=>'date',
                         'attribute' => 'created_at',
                         'format' => 'datetime',
                         'options' => ['style' => 'width:160px']

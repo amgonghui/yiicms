@@ -41,6 +41,7 @@ class NewsController extends Controller
         }
         return $this->render('index',['model'=>$model]);
     }
+
     /**
      * Displays news page
      *

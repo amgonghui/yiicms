@@ -1,12 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\form\ActiveForm;
-use kartik\file\FileInput;
-use kartik\file\CanvasBlobAsset;
-use kartik\file\SortableAsset;
-use kartik\file\DomPurifyAsset;
 use kartik\file\FileInputAsset;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Photos */
 /* @var $newPhotoDetail app\models\PhotosDetail */
@@ -15,22 +11,9 @@ use kartik\file\FileInputAsset;
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => '产品管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-CanvasBlobAsset::register($this);
-SortableAsset::register($this);
-DomPurifyAsset::register($this);
+
 FileInputAsset::register($this);
 ?>
-<style>
-    .img-thumbnail {
-        max-width: 150px;
-        max-height: 150px;
-    }
-
-    .img-box {
-        height: 300px;
-        border: 1px solid #ccc
-    }
-</style>
 <div class="content-view">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs" role="tablist">
@@ -39,30 +22,36 @@ FileInputAsset::register($this);
             <li role="presentation" class="active"><?= Html::a('上传照片', ['#']) ?></li>
         </ul>
         <div class="tab-content">
-            <p>
-                <?= $this->render('_upload_form', [
-                    'model' => $newPhotoDetail,
-                ]) ?>
-            </p>
-            <div class="row">
-                <div class="col-lg-3"><img src="<?= $model->image ?>"/></div>
-            </div>
-            <div class="form-group">
-            <div class="file-input" id="photo-list">
-                <div class="file-preview">
+            <div class="box box-solid">
+                <p>
+                    <div class="pull-left">
+                        <img id="cover-image" src="<?= $model->image ?>" title="相册封面" class="img-thumbnail" style="width: 80px;height: 80px"/>
+                    </div>
+                    <div class="pull-left" style="margin-left: 20px">
+                        <h4><?=$this->title?></h4>
+                        <?= $this->render('_upload_form', [
+                            'model' => $newPhotoDetail,
+                        ]) ?>
+                    </div>
+                    <div class="clearfix"></div>
+                </p>
+
+                <div class="file-input">
                     <div class="file-drop-disabled">
                         <div class="file-preview-thumbnails">
                             <div class="file-initial-thumbs">
-                                <div class="clearfix">
-                                <?php if (isset($detailModelList) && is_array($detailModelList)):foreach ($detailModelList as $item): ?>
-                                    <?= $this->render('_detail_item', ['model' => $item]) ?>
-                                <?php endforeach;endif; ?>
+                                <div class="clearfix" id="photo-list">
+                                    <?php if (isset($detailModelList) && is_array($detailModelList)):foreach ($detailModelList as $item): ?>
+                                        <?= $this->render('_detail_item', ['model' => $item]) ?>
+                                    <?php endforeach; endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="overlay dark" style="display: none">
+                    <i class="fa fa-spinner fa-spin" style="font-size: 100px;color:#fff"></i>
+                </div>
             </div>
         </div>
     </div>

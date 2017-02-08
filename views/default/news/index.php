@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="body-content">
         <div class="row">
             <div class="col-lg-3">
-                <?=\app\widgets\Category::widget(['type'=>\app\models\Content::TYPE_NEWS,'title'=>'新闻分类',
+                <?=\app\widgets\Category::widget(['type'=>\app\models\Content::TYPE_NEWS,'title'=>'新闻分类','baseUrl'=>'/news/list',
                     'options'=>['class'=>'panel panel-default panel-'.\yii\helpers\ArrayHelper::getValue($this->params,'themeColor')]
                 ])?>
                 <?=\app\widgets\LastNews::widget(['options'=>['class'=>'panel panel-default panel-'.\yii\helpers\ArrayHelper::getValue($this->params,'themeColor')]
@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-lg-9">
                 <div class="page-header">
                     <h1><?=$model->title?></h1>
-                    <small><?=date('Y-m-d H:i:s',$model->updated_at)?></small>
+                    <small><?=date('Y-m-d H:i:s',$model->updated_at)?> <span class="glyphicon glyphicon-eye-open"><?=$model->hits?></span></small>
                 </div>
                 <div class="panel-body">
                     <?=$model->detail->detail?>
@@ -58,3 +58,4 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php $this->renderDynamic('\app\models\Content::hitCounters('.$model->id.');')?>

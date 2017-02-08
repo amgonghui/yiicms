@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    background-color: #ebebeb;
 }
 
 .wrap {
@@ -14,13 +15,12 @@ body {
     padding: 0 15px 20px;
 }
 .topbar{
-    background-color:#fcfcfc;height: 28px;
+    background-color:#fcfcfc;height: 30px;
     line-height: 28px;color:#727272;
     border-bottom:1px solid #ebebeb;
-    margin-bottom: 20px;
 }
 .footer {
-    height: 60px;
+    height: 130px;
     background-color: #f5f5f5;
     border-top: 1px solid #ddd;
     padding-top: 20px;
@@ -124,20 +124,25 @@ a.desc:after {
         font-size: 28px;
         line-height: 45px;
     }
+    .navbar > .container .navbar-brand{
+        margin-left: 0;
+    }
     .navbar-brand img{
         max-width:130px; max-height:45px
     }
     .navbar-nav > li > a {
-        margin: 20px 10px;
+        margin: 10px 10px;
         padding: 5px 10px;
+        margin-top: 25px;
         /*line-height: 45px;*/
         font-size: 16px;
+        border-radius: 2px;
     }
     .navbar-brand {
         padding: 15px 0;
     }
     .navbar-nav > li > .dropdown-menu {
-        margin-top: -20px;
+        margin-top: -11px;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         margin-right: 10px;
@@ -151,9 +156,22 @@ a.desc:after {
     color: inherit;
     line-height: 30px;
 }
-.panel-heading{border-bottom: 3px solid}
-
+.breadcrumb{background-color:#fff}
+.list-group-item-simple {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    /*border-bottom: 1px solid #ddd;*/
+}
 @media (max-width: 767px) {
+    .container > .navbar-header, .container-fluid > .navbar-header
+    {
+        margin-right: -15px;
+        margin-left: -15px;
+        margin-top: 30px;
+    }
     .navbar-brand img{
         max-width: 120px;
         max-height: 24px;
@@ -168,16 +186,28 @@ a.desc:after {
 .navbar-nav > li > a {
     color: #000;
 }
-.panel-default{
+.projects-header {
+    width: 60%;
+    text-align: center;
+    margin: 60px 0 10px;
+    font-weight: 200;
+    /*margin-bottom: 10px;*/
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 .panel-default > .panel-heading{
     background-color: #fff;
+}
+.panel-heading{border-bottom: 3px solid}
+.panel h1, .h1, h2, .h2, h3, .h3{
+    margin-top: 0;
 }
 /** 蓝色主题0099FF*/
 .navbar-blue{
     border: none;
 }
-.navbar {border-radius: 0;margin-bottom:0}
+.navbar {border-radius: 0;margin-bottom:0;background-color: #fff}
 .navbar-blue .nav > li > a:hover,
 .navbar-blue .nav > li > a:focus {background-color: #3a80a7;color:#fff}
 .navbar-blue .navbar-collapse,
@@ -407,11 +437,20 @@ a.desc:after {
     }
 }
 /** 其他样式*/
-.panel-yellow .panel-heading{border-bottom-color:#f19b2c;}
-.panel-blue .panel-heading{border-bottom-color: #408eba;}
-.panel-red .panel-heading{border-bottom-color: #db4c3f;}
-.panel-green .panel-heading{border-bottom-color: #18a55d;}
-.panel-purple .panel-heading{border-bottom-color: #605ea6;}
+.panel-title{position: relative}
+.panel-title:after{
+    background-color: #408eba;
+    content:"";
+    width: 100px;height: 3px;
+    position: absolute;
+    top: 40px;
+    left: -15px;
+}
+.panel-blue .panel-title:after{background-color: #408eba;}
+.panel-yellow .panel-title:after{background-color:#f19b2c;}
+.panel-red .panel-title:after{background-color: #db4c3f;}
+.panel-green .panel-title:after{background-color: #18a55d;}
+.panel-purple .panel-title:after{background-color: #605ea6;}
 
 .table-simple{
     width:100%
@@ -421,7 +460,7 @@ a.desc:after {
 .table-simple > thead > tr > td,
 .table-simple > tbody > tr > td,
 .table-simple > tfoot > tr > td {
-    padding: 8px;
+    padding: 8px 0;
     line-height: 1.42857143;
     vertical-align: top;
     border-bottom: 1px dashed #ddd;
